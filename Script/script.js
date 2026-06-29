@@ -3,7 +3,7 @@ const productName = document.getElementById("productName");
 const productPrice = document.getElementById("productPrice");
 const productCate = document.getElementById("productCate");
 const productDesc = document.getElementById("productDesc");
-const productCurrency = document.getElementById("currency");
+
 const productImage = document.getElementById("productImage");
 const searchInput = document.getElementById("search");
 const addBtn = document.getElementById("addBtn");
@@ -35,7 +35,6 @@ addBtn.addEventListener("click", (e) => {
         price: productPrice.value,
         categorey: productCate.value,
         desciption: productDesc.value,
-        currency: productCurrency.value,
         // image: productImage.value.split("\\").slice(-1).toString(),
         image: image,
       };
@@ -112,7 +111,7 @@ function retrieveProducts(products) {
               <span class="text-lg line-clamp-2 cursor-pointer ">${product.desciption}</span>
               <span class="text-lg absolute border transition-all shadow p-2 group-hover/desc:delay-500 group-hover/desc:duration-150 invisible opacity-0 group-hover/desc:opacity-100 group-hover/desc:visible group-hover/desc:transition-all rounded-xl w-full left-0 top-1/1 z-999 text-white bg-red-500 ">${product.desciption}</span>
               </div>
-              <h3 class="text-xl font-medium">Price: ${product.price} ${product.currency}</h3>
+              <h3 class="text-xl font-medium">Price: ${product.price} LE</h3>
               <h3 class="text-xl font-medium">Category: ${product.categorey}</h3>
             </div>
             <div class="">
@@ -181,7 +180,6 @@ updateBtn.addEventListener("click", (e) => {
         price: productPrice.value,
         categorey: productCate.value,
         desciption: productDesc.value,
-        currency: productCurrency.value,
         // image: productImage.value.split("\\").slice(-1).toString(),
         image: imageUrl,
       };
@@ -225,7 +223,6 @@ updateBtn.addEventListener("click", (e) => {
       price: productPrice.value,
       categorey: productCate.value,
       desciption: productDesc.value,
-      currency: productCurrency.value,
       // image: productImage.value.split("\\").slice(-1).toString(),
       image: imageUrl,
     };
