@@ -8,6 +8,7 @@ const productImage = document.getElementById("productImage");
 const searchInput = document.getElementById("search");
 const addBtn = document.getElementById("addBtn");
 const updateBtn = document.getElementById("updateBtn");
+const cancelBtn = document.getElementById("cancelBtn");
 const filterBtn = document.getElementById("filterBtn");
 const filterDiv = document.getElementById("filterDiv");
 const filterMinPrice = document.getElementById("filterMinPrice");
@@ -21,7 +22,6 @@ let productList = [];
 if (localStorage.getItem("productList")) {
   productList = JSON.parse(localStorage.getItem("productList"));
   retrieveProducts(productList);
-  console.log(productList);
 }
 
 addBtn.addEventListener("click", (e) => {
@@ -30,72 +30,78 @@ addBtn.addEventListener("click", (e) => {
 
   let imageUrl = "";
   const image = productImage.files[0];
-  const reader = new FileReader();
-  reader.readAsDataURL(image);
-  reader.onload = function () {
-    const imageBase64 = reader.result;
-    imageUrl = imageBase64;
-
-    const product = {
-      name: productName.value,
-      price: productPrice.value,
-      categorey: productCate.value,
-      desciption: productDesc.value,
-      currency: productCurrency.value,
-      // image: productImage.value.split("\\").slice(-1).toString(),
-      image: imageUrl,
-    };
-
-    productList.push(product);
-
-    try {
-      window.localStorage.setItem("productList", JSON.stringify(productList));
-        Swal.fire({
-          position: "top-end",
-          icon: "success",
-          title: "Product has been created successfully!",
-          showConfirmButton: false,
-          timer: 1500
-        });
-      retrieveProducts(productList);
-      clearForm();
-    } catch (error) {
-      console.log(error);
-      if (error.name == "QuotaExceededError") {
-        productList.pop();
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: "You reached the maximum memorey storage!",
-          footer: "<a href=\"#\">let's Try with other image...</a>"
-        });
-      } else {
-       Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: "Error, Please try again!",
-        });
+  const product = {
+        name: productName.value,
+        price: productPrice.value,
+        categorey: productCate.value,
+        desciption: productDesc.value,
+        currency: productCurrency.value,
+        // image: productImage.value.split("\\").slice(-1).toString(),
+        image: image,
+      };
+  if(image&&product.name&&product.categorey&&product.desciption&&product.price){
+    const reader = new FileReader();
+    reader.readAsDataURL(image);
+    reader.onload = function () {
+      const imageBase64 = reader.result;
+      imageUrl = imageBase64;
+      product.image=imageUrl;
+      productList.push(product);
+  
+      try {
+        window.localStorage.setItem("productList", JSON.stringify(productList));
+          Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: "Product has been created successfully!",
+            showConfirmButton: false,
+            timer: 1500
+          });
+        retrieveProducts(productList);
+        clearForm();
+      } catch (error) {
+        if (error.name == "QuotaExceededError") {
+          productList.pop();
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "You reached the maximum memorey storage!",
+            footer: "<a href=\"#\">let's Try with other image...</a>"
+          });
+        } else {
+         Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Error, Please try again!",
+          });
+        }
       }
-    }
-  };
+    };
+  }else{
+         Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Please fill details :(",
+          });
+  }
 });
 
 function clearForm() {
   productName.value = null;
   productDesc.value = null;
   productPrice.value = null;
-  productCate.value = null;
+  productCate.value = "electronics";
   productImage.value = null;
 }
 function retrieveProducts(products) {
   productBox.innerHTML = !products.length?`
-  <div class="col-span-12 flex flex-col items-center justify-center gap-1 relative -mt-20">
-         <img src="./Images/emptylist.webp" alt="">
+  <div class="col-span-12 flex flex-col items-center justify-center gap-1 relative">
+         <img src="./Images/emptylist.png" alt="">
           <div class="text-center space-y-2 absolute top-4/5">
           <h2 class="text-5xl font-mono" >Ooops! It's Empty</h2>
           <p class="text-lg font-sans text-gray-700 " >Looks like You don't have anything in your list</p>
           </div>
-          </div>
+  </div>
   `:'';
   products.map((product, index) => {
     productBox.innerHTML += `<div class=" col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3 p-3  border flex flex-col rounded-lg border-black/20">
@@ -152,6 +158,7 @@ function updateProduct(index) {
   productDesc.value = productList[index].desciption;
   addBtn.classList.replace("inline", "hidden");
   updateBtn.classList.replace("hidden", "inline");
+  cancelBtn.classList.toggle("hidden");
   window.scrollTo({
     top: 0,
     behavior: "smooth",
@@ -188,11 +195,11 @@ updateBtn.addEventListener("click", (e) => {
             title: `${product.name}`,
             text: "Product updated successfully :)",
             imageUrl: `${imageUrl}`,
-            objectFit: "contain",
             imageAlt: `${product.name}`
           });
         clearForm();
         updateBtn.classList.replace("inline", "hidden");
+        cancelBtn.classList.toggle("hidden");
         addBtn.classList.replace("hidden", "inline");
       } catch (error) {
         console.log(error);
@@ -226,7 +233,6 @@ updateBtn.addEventListener("click", (e) => {
       title: `${product.name}`,
       text: "Product updated successfully :)",
       imageUrl: `${imageUrl}`,
-      objectFit: "contain",
       imageAlt: `${product.name}`
     });
     productList.splice(currentIndex, 1, product);
@@ -235,9 +241,22 @@ updateBtn.addEventListener("click", (e) => {
     clearForm();
     updateBtn.classList.replace("inline", "hidden");
     addBtn.classList.replace("hidden", "inline");
+    cancelBtn.classList.toggle("hidden");
   }
 });
+cancelBtn.addEventListener("click",(e)=>{
+  e.preventDefault();
+  clearForm();
+  updateBtn.classList.replace("inline", "hidden");
+  addBtn.classList.replace("hidden", "inline");
+  cancelBtn.classList.toggle("hidden");
+  Swal.fire({
+    title: "Cancelled",
+    text: "Your product is safe :)",
+    icon: "error"
+  });
 
+})
 searchInput.addEventListener("input", () => {
   ApplyFilterAndSearch();
 });

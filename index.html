@@ -45,14 +45,15 @@
 
         <div class="flex flex-col w-full sm:w-2/3 self-start">
           <label for="productImage" class="text-md text-black/70 font-semibold justify-items-start ">Product Image:</label>
-          <input required type="file" id="productImage" name="productImage" class="text-md text-black/80 file:border-e file:cursor-pointer file:p-0.5  hover:file:bg-black/10 border border-black/60 rounded-lg " />
+          <input required type="file" accept="image/*" id="productImage" name="productImage" class="text-md text-black/80 file:border-e file:cursor-pointer file:p-0.5  hover:file:bg-black/10 border border-black/60 rounded-lg " />
         </div>
           <div class="w-full">
             <button id="addBtn" class="inline border  px-4 py-1 text-lg bg-blue-500 text-white rounded-lg cursor-pointer hover:bg-blue-600/90">Create Product</button>
             <button id="updateBtn" class="hidden border  px-4 py-1 text-lg bg-amber-500 text-white rounded-lg cursor-pointer hover:bg-amber-600/80">Update Product</button>
+            <button id="cancelBtn" class="hidden border  px-4 py-1 text-lg bg-red-500 text-white rounded-lg cursor-pointer hover:bg-red-600">Cancel</button>
           </div>
       </form>
-      <div class="w-3/4 md:w-3/4 mx-auto  mb-10 ">
+      <div class="w-3/4 md:w-3/4 mx-auto mb-10 ">
         <div class="relative w-full flex">
           <div class="w-4/12 sm:w-3/12 lg:w-2/12 xl:w-1/12 border border-black/40 text-black/70 rounded-s-4xl border-e-0 flex items-center justify-center font-semibold space-x-0.5"> <span>Serach</span><i class="fa-brands scale-110 fa-sistrix"></i></div>
           <input id="search" class=" mx-auto w-8/12 sm:w-9/12 font-mono lg:w-10/12 xl:w-11/12 border text-lg  border-black/40 rounded-e-4xl text-black outline-0  p-3 px-3"/>
